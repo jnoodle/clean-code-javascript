@@ -1,5 +1,7 @@
 # clean-code-javascript
 
+加些自己的解读，内部分享用
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
@@ -43,9 +45,15 @@ shaped into its final form. Finally, we chisel away the imperfections when
 we review it with our peers. Don't beat yourself up for first drafts that need
 improvement. Beat up the code instead!
 
+Martin Fowler 大牛写了两本开发人员必读的书：《代码整洁之道（Clean Code）》和《重构：改善既有代码的设计（Refactoring: Improving the Design of Existing Code）》
+
+很多建议或原则不仅适用于 JavaScript，还适用于所有的编程语言，可以看做是开发人员的基本素养。
+
 ## **Variables**
 
 ### Use meaningful and pronounceable variable names
+
+对于变量的取名要注意，我们经常会用一些 str，i，j 之类的，尽量用有意义的名字替代
 
 **Bad:**
 
@@ -62,6 +70,8 @@ const currentDate = moment().format("YYYY/MM/DD");
 **[⬆ back to top](#table-of-contents)**
 
 ### Use the same vocabulary for the same type of variable
+
+这个在多人协作的时候很容易有问题，要逐渐形成团队习惯
 
 **Bad:**
 
@@ -89,6 +99,8 @@ Make your names searchable. Tools like
 [ESLint](https://github.com/eslint/eslint/blob/660e0918933e6e7fede26bc675a0763a6b357c94/docs/rules/no-magic-numbers.md)
 can help identify unnamed constants.
 
+减少 Magic number 的使用
+
 **Bad:**
 
 ```javascript
@@ -108,6 +120,8 @@ setTimeout(blastOff, MILLISECONDS_IN_A_DAY);
 **[⬆ back to top](#table-of-contents)**
 
 ### Use explanatory variables
+
+解释变量可以让一些初看起来莫名其妙的值容易被理解
 
 **Bad:**
 
@@ -134,6 +148,30 @@ saveCityZipCode(city, zipCode);
 ### Avoid Mental Mapping
 
 Explicit is better than implicit.
+
+使用含义明确的变量。`Explicit is better than implicit.` 出自 The Zen of Python（Python 里面 import this 后会显示 The Zen of Python ，一大串偈语）
+
+```
+Beautiful is better than ugly. 优美胜于丑陋
+Explicit is better than implicit. 明了胜于晦涩
+Simple is better than complex. 简洁胜于复杂
+Complex is better than complicated. 复杂胜于凌乱
+Flat is better than nested. 扁平胜于嵌套
+Sparse is better than dense. 间隔胜于紧凑
+Readability counts. 可读性很重要
+Special cases aren't special enough to break the rules. 
+Although practicality beats purity. 即便假借特例的实用性之名，也不可违背这些规则
+Errors should never pass silently.
+Unless explicitly silenced. 不要包容所有错误，除非你确定需要这样做
+In the face of ambiguity, refuse the temptation to guess. 当存在多种可能，不要尝试去猜测
+There should be one-- and preferably only one --obvious way to do it. 而是尽量找一种，最好是唯一一种明显的解决方案
+Although that way may not be obvious at first unless you're Dutch. 虽然这并不容易，因为你不是 Python 之父
+Now is better than never.
+Although never is often better than *right* now. 做也许好过不做，但不假思索就动手还不如不做
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea. 如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然
+Namespaces are one honking great idea -- let's do more of those! 命名空间是一种绝妙的理念，我们应当多加利用
+```
 
 **Bad:**
 
@@ -171,6 +209,8 @@ locations.forEach(location => {
 If your class/object name tells you something, don't repeat that in your
 variable name.
 
+不要啰嗦
+
 **Bad:**
 
 ```javascript
@@ -207,6 +247,8 @@ Default arguments are often cleaner than short circuiting. Be aware that if you
 use them, your function will only provide default values for `undefined`
 arguments. Other "falsy" values such as `''`, `""`, `false`, `null`, `0`, and
 `NaN`, will not be replaced by a default value.
+
+用好默认参数可以节省很多不必要的代码
 
 **Bad:**
 
@@ -258,6 +300,8 @@ destructuring syntax. This has a few advantages:
 3. Linters can warn you about unused properties, which would be impossible
    without destructuring.
 
+简而言之就是参数最好不要超过2个，可以用解构对象来替代签名
+
 **Bad:**
 
 ```javascript
@@ -291,6 +335,17 @@ When you can isolate a function to just one action, they can be refactored
 easily and your code will read much cleaner. If you take nothing else away from
 this guide other than this, you'll be ahead of many developers.
 
+这里主要是说 SRP，设计模式有6大原则，或者5大（SOLID），后面也有详细说明：
+
+- 单一职责（SRP）：主要是降低变更引起的风险
+- 开放封闭（OCP）：对扩展开放，对修改关闭
+- 里式替换（LSP）：父类可以用子类替换，如果不能替换，建议放弃继承，使用聚合、组合之类的
+- 接口隔离（ISP）：接口尽量小
+- 依赖倒置（DIP）：高层不依赖低层，抽象不依赖细节，主要就是松耦合
+- 迪米特（LoD）：类对自己依赖的类知道的越少越好，也就是类间解耦
+
+不过不绝对，有时候拆的太细反而难读。
+
 **Bad:**
 
 ```javascript
@@ -320,6 +375,8 @@ function isActiveClient(client) {
 **[⬆ back to top](#table-of-contents)**
 
 ### Function names should say what they do
+
+常说代码即注释，前提就是命名要妥当。
 
 **Bad:**
 
@@ -352,6 +409,8 @@ addMonthToDate(1, date);
 When you have more than one level of abstraction your function is usually
 doing too much. Splitting up functions leads to reusability and easier
 testing.
+
+这个和刚才那个 Functions should do one thing 差不多
 
 **Bad:**
 
@@ -442,6 +501,8 @@ worse than duplicate code, so be careful! Having said this, if you can make
 a good abstraction, do it! Don't repeat yourself, otherwise you'll find yourself
 updating multiple places anytime you want to change one thing.
 
+SOLID 上面说过，还有个 DRY 原则（Don't repeat yourself），一个好的实践习惯是类似的代码，写到第三次，就要考虑抽象了，也就是 Rule Of Three 原则
+
 **Bad:**
 
 ```javascript
@@ -507,6 +568,8 @@ function showEmployeeList(employees) {
 
 ### Set default objects with Object.assign
 
+常用 Object.assign 来处理默认配置和个性化配置的覆盖
+
 **Bad:**
 
 ```javascript
@@ -562,6 +625,8 @@ createMenu(menuConfig);
 
 Flags tell your user that this function does more than one thing. Functions should do one thing. Split out your functions if they are following different code paths based on a boolean.
 
+这个也经常会遇到，用一些 type 啥的来处理多个逻辑，不过是否拆分值得商榷
+
 **Bad:**
 
 ```javascript
@@ -604,6 +669,8 @@ The main point is to avoid common pitfalls like sharing state between objects
 without any structure, using mutable data types that can be written to by anything,
 and not centralizing where your side effects occur. If you can do this, you will
 be happier than the vast majority of other programmers.
+
+副作用主要是函数式编程里的概念，一个函数不要被外部因素影响。
 
 **Bad:**
 
@@ -665,12 +732,19 @@ Two caveats to mention to this approach:
 1. There might be cases where you actually want to modify the input object,
    but when you adopt this programming practice you will find that those cases
    are pretty rare. Most things can be refactored to have no side effects!
-
 2. Cloning big objects can be very expensive in terms of performance. Luckily,
    this isn't a big issue in practice because there are
    [great libraries](https://facebook.github.io/immutable-js/) that allow
    this kind of programming approach to be fast and not as memory intensive as
    it would be for you to manually clone objects and arrays.
+
+JS 里面很多都是引用，很容易修改到原值，JS 函数式编程，避免副作用的方式就是 copy 个新的，比如在 Redux 里（https://juejin.im/post/5c18de8ef265da616413f332）。要注意 JS 里面原生方法：
+
+不改变原值的：concat, filter, map, reduce, reduceRight, reduceRight 等
+
+改变原值的： push, pop, shift, unshift, sort, reverse, splice, delete 等
+
+不确定的话，使用之前，最好都 copy 一份：`let newArr = [ ...arr ]`
 
 **Bad:**
 
@@ -702,6 +776,8 @@ to do the same thing. What if that other library was just using `diff` to find
 the difference between the first and last elements of an array? This is why it
 would be much better to just use ES2015/ES6 classes and simply extend the `Array` global.
 
+尽量不要为了方便在全局对象上乱搞
+
 **Bad:**
 
 ```javascript
@@ -729,6 +805,8 @@ class SuperArray extends Array {
 JavaScript isn't a functional language in the way that Haskell is, but it has
 a functional flavor to it. Functional languages can be cleaner and easier to test.
 Favor this style of programming when you can.
+
+可以尽量尝试函数式编程
 
 **Bad:**
 
@@ -791,6 +869,8 @@ const totalOutput = programmerOutput.reduce(
 
 ### Encapsulate conditionals
 
+有待商榷，有时候把条件封装起来会不直观
+
 **Bad:**
 
 ```javascript
@@ -814,6 +894,8 @@ if (shouldShowSpinner(fsmInstance, listNodeInstance)) {
 **[⬆ back to top](#table-of-contents)**
 
 ### Avoid negative conditionals
+
+负条件有时候不好理解
 
 **Bad:**
 
@@ -851,6 +933,8 @@ answer is a previous clean code concept we learned: a function should only do
 one thing. When you have classes and functions that have `if` statements, you
 are telling your user that your function does more than one thing. Remember,
 just do one thing.
+
+用多态来改造条件式的写法，这个也有待商榷
 
 **Bad:**
 
@@ -908,6 +992,8 @@ Sometimes you are bitten by this freedom and it becomes tempting to do
 type-checking in your functions. There are many ways to avoid having to do this.
 The first thing to consider is consistent APIs.
 
+设计一致性的 API 来避免类型检查，我理解这个其实是把类型检查给转移了。
+
 **Bad:**
 
 ```javascript
@@ -942,6 +1028,8 @@ doesn't make up for the lost readability. Keep your JavaScript clean, write
 good tests, and have good code reviews. Otherwise, do all of that but with
 TypeScript (which, like I said, is a great alternative!).
 
+使用 TypeScript 是不错的选择
+
 **Bad:**
 
 ```javascript
@@ -975,6 +1063,8 @@ resources](https://github.com/petkaantonov/bluebird/wiki/Optimization-killers)
 for seeing where optimization is lacking. Target those in the meantime, until
 they are fixed if they can be.
 
+没有必要过度优化
+
 **Bad:**
 
 ```javascript
@@ -1000,6 +1090,8 @@ for (let i = 0; i < list.length; i++) {
 Dead code is just as bad as duplicate code. There's no reason to keep it in
 your codebase. If it's not being called, get rid of it! It will still be safe
 in your version history if you still need it.
+
+不用的代码清理掉省的碍眼
 
 **Bad:**
 
@@ -1044,6 +1136,8 @@ unorganized list of reasons why:
 - Easy to add logging and error handling when getting and setting.
 - You can lazy load your object's properties, let's say getting it from a
   server.
+
+这是面向对象编程的习惯
 
 **Bad:**
 
@@ -1096,6 +1190,8 @@ account.setBalance(100);
 
 This can be accomplished through closures (for ES5 and below).
 
+其实就是用闭包来实现私有成员，用 TypeScript 会更简单
+
 **Bad:**
 
 ```javascript
@@ -1140,6 +1236,8 @@ It's very difficult to get readable class inheritance, construction, and method
 definitions for classical ES5 classes. If you need inheritance (and be aware
 that you might not), then prefer ES2015/ES6 classes. However, prefer small functions over
 classes until you find yourself needing larger and more complex objects.
+
+以前 ES5 模拟 class 的方式可以放弃了，知道原理就行
 
 **Bad:**
 
@@ -1226,6 +1324,8 @@ as jQuery and Lodash. It allows your code to be expressive, and less verbose.
 For that reason, I say, use method chaining and take a look at how clean your code
 will be. In your class functions, simply return `this` at the end of every function,
 and you can chain further class methods onto it.
+
+链式写法有时候维护起来困难些
 
 **Bad:**
 
@@ -1317,6 +1417,8 @@ makes more sense than composition:
 2. You can reuse code from the base classes (Humans can move like all animals).
 3. You want to make global changes to derived classes by changing a base class.
    (Change the caloric expenditure of all animals when they move).
+
+以我个人经验，基本上很少用到继承
 
 **Bad:**
 
@@ -1438,6 +1540,8 @@ etc.) should be open for extension, but closed for modification." What does that
 mean though? This principle basically states that you should allow users to
 add new functionalities without changing existing code.
 
+大多通过继承和多态来实现
+
 **Bad:**
 
 ```javascript
@@ -1536,6 +1640,8 @@ incorrect results. This might still be confusing, so let's take a look at the
 classic Square-Rectangle example. Mathematically, a square is a rectangle, but
 if you model it using the "is-a" relationship via inheritance, you quickly
 get into trouble.
+
+下面举的例子有点问题
 
 **Bad:**
 
@@ -1657,6 +1763,8 @@ huge amounts of options is beneficial, because most of the time they won't need
 all of the settings. Making them optional helps prevent having a
 "fat interface".
 
+接口隔离防止 fat interface 出现，不过这个例子举得也有点。。
+
 **Bad:**
 
 ```javascript
@@ -1741,6 +1849,8 @@ that are depended upon are implicit contracts. That is to say, the methods
 and properties that an object/class exposes to another object/class. In the
 example below, the implicit contract is that any Request module for an
 `InventoryTracker` will have a `requestItems` method.
+
+依赖注入就是一个 DIP 的例子
 
 **Bad:**
 
@@ -2007,6 +2117,8 @@ to the console. If you wrap any bit of code in a `try/catch` it means you
 think an error may occur there and therefore you should have a plan,
 or create a code path, for when it occurs.
 
+日志记录往往伴随预警才更有效
+
 **Bad:**
 
 ```javascript
@@ -2037,6 +2149,8 @@ try {
 
 For the same reason you shouldn't ignore caught errors
 from `try/catch`.
+
+必要的时候也要处理 rejected promise
 
 **Bad:**
 
@@ -2086,6 +2200,8 @@ for some guidance.
 JavaScript is untyped, so capitalization tells you a lot about your variables,
 functions, etc. These rules are subjective, so your team can choose whatever
 they want. The point is, no matter what you all choose, just be consistent.
+
+这句话很对，不管你选择什么，关键是保持一致
 
 **Bad:**
 
@@ -2214,6 +2330,8 @@ review.perfReview();
 ### Only comment things that have business logic complexity.
 
 Comments are an apology, not a requirement. Good code _mostly_ documents itself.
+
+该写的时候写，不该写的时候别啰嗦
 
 **Bad:**
 
